@@ -1,0 +1,123 @@
+[tool.poetry]
+name = "health-checks"
+keywords = [
+    "fastapi-health",
+    "litestar-health",
+    "health-check",
+    "uptime-monitoring",
+    "service-status",
+    "endpoint-health",
+    "application-monitoring",
+    "diagnostics",
+    "health-middleware",
+    "system-status",
+]
+classifiers = [
+    "Typing :: Typed",
+    "Topic :: Software Development :: Build Tools",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft",
+    "Operating System :: POSIX :: Linux",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+version = "0.1.0"
+description = "Library for health checks"
+authors = ["community-of-python"]
+readme = "README.md"
+packages = [{ include = "health_checks" }]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+litestar = { version = "^2.10.0", optional = true }
+fastapi = { version = "^0.112.1", optional = true }
+aiopath = { version = "^0.5.6", optional = true }
+aiofiles = "^0.6.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+pytest-cov = "^5.0.0"
+pytest-xdist = "^3.6.1"
+pytest-mock = "^3.14.0"
+anyio = "^4.4.0"
+pre-commit = "^3.8.0"
+mypy = "^1.11.1"
+types-aiofiles = "^24.1.0.20240626"
+ruff = "^0.6.1"
+pytest-httpx = "^0.30.0"
+faker = "^27.0.0"
+pydantic = "^2.8.2"
+pydantic-settings = "^2.4.0"
+
+[tool.poetry.extras]
+fastapi = ["fastapi"]
+litestar = ["litestar"]
+file = ["aiopath"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+files = ["health_checks", "tests"]
+python_version = "3.9"
+strict = true
+ignore_missing_imports = true
+pretty = true
+show_error_codes = true
+implicit_reexport = true
+warn_unused_ignores = false
+warn_return_any = false
+namespace_packages = true
+disable_error_code = "attr-defined,valid-type"
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "EM",
+    "FBT",
+    "TRY003",
+    "FIX002",
+    "TD003",
+    "D1",
+    "D106",
+    "D203",
+    "D213",
+    "G004",
+    "FA",
+    "ANN101",
+    "ANN102",
+    "COM812",
+    "ISC001",
+]
+
+[tool.ruff.lint.isort]
+no-lines-before = ["standard-library", "local-folder"]
+known-third-party = []
+known-local-folder = []
+lines-after-imports = 2
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*.py" = ["S101", "S311"]
+
+[tool.coverage.report]
+exclude_also = ["if typing.TYPE_CHECKING:", 'class \w+\(typing.Protocol\):']
+omit = ["tests/*"]
+
+[tool.pytest.ini_options]
+addopts = '--cov=. -p no:warnings --cov-report term-missing'
