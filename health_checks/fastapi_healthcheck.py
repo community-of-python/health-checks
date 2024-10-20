@@ -5,7 +5,9 @@ from fastapi import APIRouter
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 
-from health_checks.base import HealthCheck
+
+if typing.TYPE_CHECKING:
+    from health_checks.base import HealthCheck
 
 
 def build_fastapi_health_check_router(

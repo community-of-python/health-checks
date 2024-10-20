@@ -8,16 +8,16 @@ HEALTH_CHECK_FILE_NAME_TEMPLATE: typing.Final = "health-check-{file_name}.json"
 
 
 class HealthCheckTypedDict(typing.TypedDict, total=False):
-    service_version: typing.Optional[str]
-    service_name: typing.Optional[str]
+    service_version: str | None
+    service_name: str | None
     health_status: bool
 
 
 class HealthCheck(typing.Protocol):
     service_version_env: str
     service_name_env: str
-    service_version: typing.Optional[str]
-    service_name: typing.Optional[str]
+    service_version: str | None
+    service_name: str | None
 
     def _get_health_check_data(
         self,

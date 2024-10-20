@@ -1,6 +1,5 @@
 from __future__ import annotations
 import dataclasses
-import typing
 
 from health_checks import base
 
@@ -9,8 +8,8 @@ from health_checks import base
 class BaseHTTPHealthCheck(base.HealthCheck):
     service_version_env: str = "APP_VERSION"
     service_name_env: str = "APP_NAME"
-    service_version: typing.Optional[str] = None
-    service_name: typing.Optional[str] = None
+    service_version: str | None = None
+    service_name: str | None = None
 
     async def update_health_status(self) -> bool:
         raise NotImplementedError

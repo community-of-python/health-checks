@@ -7,9 +7,12 @@ from unittest.mock import patch
 import fastapi
 import litestar
 import pytest
-from httpx import AsyncClient
 
-from health_checks import base, file_based, http_based
+
+if typing.TYPE_CHECKING:
+    from httpx import AsyncClient
+
+    from health_checks import base, file_based, http_based
 
 
 pytestmark = [pytest.mark.anyio]
@@ -57,7 +60,7 @@ async def test_default_file_health_check(
     await short_lived_default_file_health_check.shutdown()
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_litestar_healthcheck(
     litestar_client: AsyncClient,
     health_check_endpoint: str,
@@ -76,7 +79,7 @@ async def test_litestar_healthcheck(
         ).status_code == litestar.status_codes.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_fastapi_healthcheck(
     fastapi_client: AsyncClient,
     health_check_endpoint: str,

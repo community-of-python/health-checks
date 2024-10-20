@@ -23,44 +23,44 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
-@pytest.fixture()
+@pytest.fixture
 def health_check_endpoint() -> str:
     return "/test_health/"
 
 
-@pytest.fixture()
+@pytest.fixture
 def fake_service_name(faker: Faker) -> str:
     """Return name of the service."""
     return faker.name()
 
 
-@pytest.fixture()
+@pytest.fixture
 def fake_service_version(faker: Faker) -> str:
     """Return version of the service."""
     return faker.numerify("%!!.%!!.%!!")
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_file_health_check() -> file_based.DefaultFileHealthCheck:
     return file_based.DefaultFileHealthCheck()
 
 
-@pytest.fixture()
+@pytest.fixture
 def short_lived_default_file_health_check(short_live_time: int) -> file_based.DefaultFileHealthCheck:
     return file_based.DefaultFileHealthCheck(failure_threshold=short_live_time, health_check_period=0)
 
 
-@pytest.fixture()
+@pytest.fixture
 def http_default_health_check(fake_service_version: str, fake_service_name: str) -> http_based.DefaultHTTPHealthCheck:
     return http_based.DefaultHTTPHealthCheck(service_version=fake_service_version, service_name=fake_service_name)
 
 
-@pytest.fixture()
+@pytest.fixture
 def short_live_time() -> int:
     return 1
 
 
-@pytest.fixture()
+@pytest.fixture
 def expected_response(fake_service_version: str, fake_service_name: str) -> base.HealthCheckTypedDict:
     return {
         "service_version": fake_service_version,
@@ -69,7 +69,7 @@ def expected_response(fake_service_version: str, fake_service_name: str) -> base
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def failed_response(fake_service_version: str, fake_service_name: str) -> base.HealthCheckTypedDict:
     return {
         "service_version": fake_service_version,
@@ -78,19 +78,19 @@ def failed_response(fake_service_version: str, fake_service_name: str) -> base.H
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 async def litestar_client(litestar_app: Litestar) -> typing.AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=litestar_app, base_url="http://test", timeout=200) as async_client:
         yield async_client
 
 
-@pytest.fixture()
+@pytest.fixture
 async def fastapi_client(fastapi_app: FastAPI) -> typing.AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=fastapi_app, base_url="http://test", timeout=200) as async_client:
         yield async_client
 
 
-@pytest.fixture()
+@pytest.fixture
 def fastapi_app(
     health_check_endpoint: str,
     http_default_health_check: http_based.DefaultHTTPHealthCheck,
@@ -105,7 +105,7 @@ def fastapi_app(
     return fastapi_app
 
 
-@pytest.fixture()
+@pytest.fixture
 def litestar_app(
     health_check_endpoint: str,
     http_default_health_check: http_based.DefaultHTTPHealthCheck,

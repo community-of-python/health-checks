@@ -16,14 +16,14 @@ from health_checks import base
 class BaseFileHealthCheck(base.HealthCheck):
     failure_threshold: int = 60
     health_check_period: int = 30
-    healthcheck_file_name: typing.Optional[str] = None
+    healthcheck_file_name: str | None = None
     base_folder: str = "./tmp/health-checks"
     service_version_env: str = "APP_VERSION"
     service_name_env: str = "APP_NAME"
-    service_version: typing.Optional[str] = None
-    service_name: typing.Optional[str] = None
+    service_version: str | None = None
+    service_name: str | None = None
     _health_check_file_path: pathlib.Path = dataclasses.field(init=False)
-    _last_health_check_time: typing.Optional[float] = dataclasses.field(init=False, default=None)
+    _last_health_check_time: float | None = dataclasses.field(init=False, default=None)
 
     def __post_init__(self) -> None:
         if self.health_check_period > self.failure_threshold:
