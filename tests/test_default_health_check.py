@@ -23,6 +23,7 @@ async def test_default_http_health_check(http_default_health_check: http_based.D
     assert (await http_default_health_check.check_health())["health_status"]
 
 
+@pytest.mark.xdist_group(name="file-based")
 async def test_default_file_health_check_startup_and_shutdown(
     default_file_health_check: file_based.DefaultFileHealthCheck,
 ) -> None:
@@ -35,14 +36,17 @@ async def test_default_file_health_check_startup_and_shutdown(
     assert not default_file_health_check.health_check_file_path.is_file()
 
 
+@pytest.mark.xdist_group(name="file-based")
 async def test_default_file_health_check_time_period(
     default_file_health_check: file_based.DefaultFileHealthCheck,
 ) -> None:
     await default_file_health_check.startup()
     assert await default_file_health_check.update_health_status()
     assert not await default_file_health_check.update_health_status()
+    await default_file_health_check.shutdown()
 
 
+@pytest.mark.xdist_group(name="file-based")
 async def test_default_file_health_check(
     short_lived_default_file_health_check: file_based.DefaultFileHealthCheck,
     short_live_time: int,
@@ -55,6 +59,8 @@ async def test_default_file_health_check(
     await asyncio.sleep(short_live_time + 1)
     health_check_data: typing.Final = await short_lived_default_file_health_check.check_health()
     assert not health_check_data["health_status"]
+
+    await short_lived_default_file_health_check.shutdown()
 
 
 @pytest.mark.anyio

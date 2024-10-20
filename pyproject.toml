@@ -120,4 +120,4 @@ exclude_also = ["if typing.TYPE_CHECKING:", 'class \w+\(typing.Protocol\):']
 omit = ["tests/*"]
 
 [tool.pytest.ini_options]
-addopts = '--cov=. -p no:warnings --cov-report term-missing'
+addopts = '--cov=. -p no:warnings --cov-report term-missing --dist=loadgroup'
