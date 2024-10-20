@@ -17,8 +17,9 @@ if typing.TYPE_CHECKING:
     from faker import Faker
 
 
-os.environ[base.POD_IDENTIFIER_ENVIRONMENT_NAME] = str(uuid.uuid4())
-file_health_check_for_main_testing: typing.Final = file_based.DefaultFileHealthCheck()
+@pytest.fixture(autouse=True)
+def _auto_hostname() -> None:
+    os.environ[base.POD_IDENTIFIER_ENVIRONMENT_NAME] = str(uuid.uuid4())
 
 
 @pytest.fixture(scope="session")
