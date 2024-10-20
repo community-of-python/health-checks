@@ -4,7 +4,6 @@ import typing
 import uuid
 
 import pytest
-from faker import Faker
 from fastapi import FastAPI
 from httpx import AsyncClient
 from litestar import Litestar
@@ -12,6 +11,10 @@ from litestar import Litestar
 from health_checks import base, file_based, http_based
 from health_checks.fastapi_healthcheck import build_fastapi_health_check_router
 from health_checks.litestar_healthcheck import build_litestar_health_check_router
+
+
+if typing.TYPE_CHECKING:
+    from faker import Faker
 
 
 os.environ[base.POD_IDENTIFIER_ENVIRONMENT_NAME] = str(uuid.uuid4())

@@ -30,7 +30,7 @@ class BaseFileHealthCheck(base.HealthCheck):
             raise ValueError(
                 "Please provide failure_threshold greater than health_check_period. Or health check will always fail.",
             )
-        health_check_file_name: typing.Optional[str] = self.healthcheck_file_name or os.environ.get(
+        health_check_file_name: str | None = self.healthcheck_file_name or os.environ.get(
             base.POD_IDENTIFIER_ENVIRONMENT_NAME,
         )
         if health_check_file_name is None:

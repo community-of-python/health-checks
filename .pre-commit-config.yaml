@@ -5,7 +5,7 @@ repos:
       - id: mypy
         name: mypy
         always_run: true
-        additional_dependencies: [pydantic>=2.3.4]
+        additional_dependencies: [pydantic>=2.3.4, types-aiofiles]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
