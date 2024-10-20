@@ -41,7 +41,6 @@ async def test_default_file_health_check_time_period(
     await default_file_health_check.startup()
     assert await default_file_health_check.update_health_status()
     assert not await default_file_health_check.update_health_status()
-    await default_file_health_check.shutdown()
 
 
 async def test_default_file_health_check(
@@ -56,8 +55,6 @@ async def test_default_file_health_check(
     await asyncio.sleep(short_live_time + 1)
     health_check_data: typing.Final = await short_lived_default_file_health_check.check_health()
     assert not health_check_data["health_status"]
-
-    await short_lived_default_file_health_check.shutdown()
 
 
 @pytest.mark.anyio
