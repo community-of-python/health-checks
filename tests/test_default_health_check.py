@@ -2,11 +2,15 @@ from __future__ import annotations
 import asyncio
 import pathlib
 import typing
+from unittest import mock
 from unittest.mock import patch
 
 import fastapi
 import litestar
 import pytest
+
+from health_checks.fastapi_healthcheck import build_fastapi_health_check_router
+from health_checks.litestar_healthcheck import build_litestar_health_check_router
 
 
 if typing.TYPE_CHECKING:
@@ -63,7 +67,6 @@ async def test_default_file_health_check(
     await short_lived_default_file_health_check.shutdown()
 
 
-@pytest.mark.anyio
 async def test_litestar_healthcheck(
     litestar_client: AsyncClient,
     health_check_endpoint: str,
@@ -82,7 +85,6 @@ async def test_litestar_healthcheck(
         ).status_code == litestar.status_codes.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@pytest.mark.anyio
 async def test_fastapi_healthcheck(
     fastapi_client: AsyncClient,
     health_check_endpoint: str,
@@ -99,3 +101,24 @@ async def test_fastapi_healthcheck(
         assert (
             await fastapi_client.get(health_check_endpoint)
         ).status_code == fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR
+
+
+@pytest.mark.parametrize("include_in_schema", [True, False])
+def test_litestar_include_in_schema(include_in_schema: bool) -> None:
+    health_check_router: typing.Final = build_litestar_health_check_router(
+        health_check=mock.Mock(), include_in_schema=include_in_schema
+    )
+    application: typing.Final = litestar.Litestar(route_handlers=[health_check_router])
+
+    assert bool(application.openapi_schema.paths) is include_in_schema
+
+
+@pytest.mark.parametrize("include_in_schema", [True, False])
+def test_fastapi_include_in_schema(include_in_schema: bool) -> None:
+    health_check_router = build_fastapi_health_check_router(
+        health_check=mock.Mock(), include_in_schema=include_in_schema
+    )
+    application: typing.Final = fastapi.FastAPI()
+    application.include_router(health_check_router)
+
+    assert bool(application.openapi()["paths"]) is include_in_schema
