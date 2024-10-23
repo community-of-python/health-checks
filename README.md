@@ -46,7 +46,7 @@ litestar_application = litestar.Litestar(
 )
 ```
 
-This is it! Now if yout go to `/health/` you will notice a 200 HTTP status code if everything is allright. Otherwise you will face a 500 HTTP status code.
+This is it! Now if your go to `/health/` you will notice a 200 HTTP status code if everything is alright. Otherwise you will face a 500 HTTP status code.
 
 Similar to litestar, here is the **FastAPI** example
 
@@ -75,7 +75,7 @@ Let's imagine a simple consumer
 ```python
 import dataclasses
 
-from health_cheks.base import HealthCheck
+from health_checks.base import HealthCheck
 
 
 @dataclasses.dataclass
@@ -101,8 +101,8 @@ class SimpleConsumer:
                 continue
 ```
 
-This is very **important** to place your health check inside infinite loop or something like that in your consumer.  
-You cannot use it inside your message processing function or method because if there will be no messages - your consumer will die eventually. And this is not the case we are lookin for.  
+This is very **important** to place your health check inside infinite loop or something like that in your consumer.
+You cannot use it inside your message processing function or method because if there will be no messages - your consumer will die eventually. And this is not the case we are looking for.
 So, your update_health method call should be independent from message processing, also it should not be locked by it.
 
 So, here how your code could look like
@@ -118,7 +118,7 @@ health_check_object = file_based.DefaultFileHealthCheck()
 consumer = SimpleConsumer(health_check_object)
 
 if __name__ == '__main__':
-    asyncio.run(consumer.run_comsumer())
+    asyncio.run(consumer.run_consumer())
 ```
 
 Cool! Now during your consumer process health will be updated. But how to check it and where?
@@ -130,7 +130,7 @@ python -m health_checks directory.some_file:health_check_object
 ```
 
 Here `some_file` is the name of file and `health_check_object` is the name of file_based.DefaultFileHealthCheck object.
-If everything is allright, then there will be no exception, but if it is not - there will be
+If everything is alright, then there will be no exception, but if it is not - there will be
 
 And you use it inside your k8s manifest like this:
 
@@ -161,15 +161,15 @@ class BaseFileHealthCheck(base.HealthCheck):
 - `health_check_period` - delay time before updating health check file
 - `healthcheck_file_name` - you can pass an explicit file name to your health check.
 
-> IMPORTANT: You actually have to pass `healthcheck_file_name` it if your are not running in k8s environment.  
-> In that case your health check file will be named randomly and you cannot check health with provided script.  
+> IMPORTANT: You actually have to pass `healthcheck_file_name` it if your are not running in k8s environment.
+> In that case your health check file will be named randomly and you cannot check health with provided script.
 > If you are running in k8s, then file name will be made of `HOSTNAME` env variable a.k.a. pod id.
 
 > IMPORTANT: Consider putting your health check into separate file to prevent useless imports during health check script execution.
 
 ## FAQ
 
-- **Why do i even need `health_check_period` in FILE based health check?**  
+- **Why do i even need `health_check_period` in FILE based health check?**
   This parameter helps to throttle calls to `update_health` method. By default `update_health` will be called every 30 seconds.
-- **Custom health checks**  
+- **Custom health checks**
   There are two options. You can inherit from `BaseFileHealthCheck` or `BaseHTTPHealthCheck`. Another way is to implement class according to HealthCheck protocol. More information about protocols [here](https://peps.python.org/pep-0544/).
