@@ -8,8 +8,8 @@ HEALTH_CHECK_FILE_NAME_TEMPLATE: typing.Final = "health-check-{file_name}.json"
 
 
 class HealthCheckTypedDict(typing.TypedDict, total=False):
-    service_version: str | None
-    service_name: str | None
+    service_version: typing.Optional[str]  # noqa: UP007 (Litestar fails to build OpenAPI schema on Python 3.9)
+    service_name: typing.Optional[str]  # noqa: UP007 (Litestar fails to build OpenAPI schema on Python 3.9)
     health_status: bool
 
 
