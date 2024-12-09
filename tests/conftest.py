@@ -3,9 +3,9 @@ import os
 import typing
 import uuid
 
+import httpx
 import pytest
 from fastapi import FastAPI
-from httpx import AsyncClient
 from litestar import Litestar
 
 from health_checks import base, file_based, http_based
@@ -83,14 +83,20 @@ def failed_response(fake_service_version: str, fake_service_name: str) -> base.H
 
 
 @pytest.fixture
-async def litestar_client(litestar_app: Litestar) -> typing.AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=litestar_app, base_url="http://test", timeout=200) as async_client:
+async def litestar_client(litestar_app: Litestar) -> typing.AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=litestar_app),  # type: ignore[arg-type]
+        base_url="http://test",
+    ) as async_client:
         yield async_client
 
 
 @pytest.fixture
-async def fastapi_client(fastapi_app: FastAPI) -> typing.AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=fastapi_app, base_url="http://test", timeout=200) as async_client:
+async def fastapi_client(fastapi_app: FastAPI) -> typing.AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=fastapi_app),
+        base_url="http://test",
+    ) as async_client:
         yield async_client
 
 
