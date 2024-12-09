@@ -4,7 +4,7 @@ import typing
 import litestar
 import litestar.exceptions
 
-from health_checks import base  # noqa: TCH001
+from health_checks import base  # noqa: TC001
 
 
 def build_litestar_health_check_router(

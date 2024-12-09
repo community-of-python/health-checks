@@ -1,6 +1,6 @@
 # HealthChecks
 
-Welcome to the healthiest library of all times! It provides a simple interface to check the health of your application.
+Welcome to the healthiest library of all time! It provides a simple interface to check the health of your application.
 
 We have base classes for HTTP and FILE based health checks.
 
@@ -28,7 +28,7 @@ poetry run health-checks -E file
 
 ## HTTP based quickstart
 
-Let's begin with http based healthchecks for **Litestar** application:
+Let's begin with http based health-checks for **Litestar** application:
 
 ```python
 from health_checks.http_based import DefaultHTTPHealthCheck
