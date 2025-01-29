@@ -1,5 +1,8 @@
-[tool.poetry]
+[project]
 name = "health-checks"
+description = "Library for health checks"
+readme = "README.md"
+requires-python = ">=3.9,<4"
 keywords = [
     "fastapi-health",
     "litestar-health",
@@ -27,42 +30,39 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-version = "0"
-description = "Library for health checks"
-authors = ["community-of-python"]
-readme = "README.md"
-packages = [{ include = "health_checks" }]
+dependencies = [
+    "aiofiles>=0.6.0",
+    "aiopath>=0.5.6",
+    "fastapi>=0.100",
+    "litestar>=2",
+]
+dynamic = ["version"]
+authors = [{ name = "community-of-python" }]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-litestar = { version = ">=2", optional = true }
-fastapi = { version = ">=0.100", optional = true }
-aiopath = { version = "*", optional = true }
-aiofiles = "*"
+[dependency-groups]
+dev = [
+    "anyio>=4.8.0",
+    "faker>=35.0.0",
+    "mypy>=1.14.1",
+    "pre-commit>=4.1.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.7.1",
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pytest-httpx>=0.35.0",
+    "pytest-mock>=3.14.0",
+    "pytest-xdist>=3.6.1",
+    "ruff>=0.9.3",
+    "types-aiofiles>=24.1.0.20241221",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "*"
-pytest-cov = "*"
-pytest-xdist = "*"
-pytest-mock = "*"
-anyio = "*"
-pre-commit = "*"
-mypy = "*"
-types-aiofiles = "*"
-ruff = "*"
-pytest-httpx = "*"
-faker = "*"
-pydantic = "*"
-pydantic-settings = "*"
-
-[tool.poetry.extras]
-fastapi = ["fastapi"]
-litestar = ["litestar"]
-file = ["aiopath"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.mypy]
 files = ["health_checks", "tests"]
@@ -98,8 +98,6 @@ ignore = [
 
 [tool.ruff.lint.isort]
 no-lines-before = ["standard-library", "local-folder"]
-known-third-party = []
-known-local-folder = []
 lines-after-imports = 2
 
 [tool.ruff.lint.extend-per-file-ignores]
