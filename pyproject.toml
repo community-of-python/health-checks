@@ -33,11 +33,17 @@ classifiers = [
 dependencies = [
     "aiofiles>=0.6.0",
     "aiopath>=0.5.6",
-    "fastapi>=0.100",
-    "litestar>=2",
 ]
 dynamic = ["version"]
 authors = [{ name = "community-of-python" }]
+
+[project.optional-dependencies]
+fastapi = [
+    "fastapi>=0.100",
+]
+litestar = [
+    "litestar>=2",
+]
 
 [dependency-groups]
 dev = [
